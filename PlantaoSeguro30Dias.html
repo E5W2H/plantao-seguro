@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🩺 Plantão Seguro — 30 Dias</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#080c14;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;color:#e2e8f0;min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+#hero{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0c1628 100%);padding:28px 20px 24px;border-bottom:1px solid #1e293b}
+.inner{max-width:700px;margin:0 auto}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.brand-name{font-size:18px;font-weight:700;color:#f1f5f9;letter-spacing:-0.02em}
+.brand-sub{font-size:11px;color:#475569;margin-top:2px}
+.pct-big{text-align:right}
+.pct-num{font-size:40px;font-weight:800;letter-spacing:-0.04em;background:linear-gradient(135deg,#6366f1,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pct-label{font-size:11px;color:#475569}
+.bar-wrap{background:#0f172a;border-radius:999px;height:10px;overflow:hidden;margin-bottom:10px}
+.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#6366f1,#8b5cf6,#22c55e);transition:width .5s}
+.stats-row{display:flex;gap:20px;margin-bottom:20px}
+.stat{font-size:12px;color:#64748b}
+.stat span{font-weight:700;color:#94a3b8}
+.weeks-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.week-card{background:#0d1117;border-radius:10px;padding:10px 14px}
+.week-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
+.week-bar{background:#0f172a;border-radius:999px;height:5px;overflow:hidden;margin-bottom:5px}
+.week-fill{height:100%;border-radius:999px;transition:width .4s}
+.week-stats{font-size:11px;color:#334155}
+#main{max-width:700px;margin:0 auto;padding:16px 16px 60px}
+.legend{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#475569}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:5px 14px;border-radius:999px;border:1px solid #1e293b;color:#475569;font-size:12px;font-weight:500;transition:all .15s}
+.filter-btn.active{border-color:#6366f1;background:#6366f120;color:#818cf8}
+.sem-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin:18px 0 8px 2px}
+.day-card{background:#0d1117;border-radius:12px;margin-bottom:8px;border:1px solid #1e293b;overflow:hidden}
+.day-card.done{border-color:#22c55e30}
+.day-head{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none}
+.day-num{width:34px;height:34px;border-radius:8px;background:#131c2e;border:1px solid #1e293b;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#475569;flex-shrink:0}
+.day-num.done{background:#22c55e20;border-color:#22c55e50;color:#22c55e}
+.day-info{flex:1;min-width:0}
+.day-tema{font-size:13px;font-weight:600;color:#cbd5e1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-tema.done{color:#94a3b8}
+.day-bar-row{display:flex;align-items:center;gap:8px;margin-top:5px}
+.day-bar-track{flex:1;background:#0f172a;border-radius:999px;height:4px;overflow:hidden}
+.day-bar-fill{height:100%;border-radius:999px;transition:width .3s}
+.day-pct{font-size:11px;font-weight:700;min-width:32px}
+.chevron{font-size:10px;color:#334155}
+.sub-area{border-top:1px solid #0f172a;padding:10px 14px 14px}
+.sub-item{padding:8px 0;border-bottom:1px solid #0d1117}
+.sub-item:last-child{border:none}
+.sub-text{font-size:12px;color:#64748b;margin-bottom:6px;line-height:1.6}
+.sub-text.done{color:#334155;text-decoration:line-through}
+.fase-row{display:flex;gap:6px;flex-wrap:wrap}
+.fase-btn{padding:3px 10px;border-radius:999px;font-size:11px;font-weight:500;transition:all .2s}
+.footer{text-align:center;padding:28px 0 0;font-size:12px;color:#1e2535;line-height:1.8}
+</style>
+</head>
+<body>
+<div id="hero"><div class="inner">
+  <div class="hero-top">
+    <div class="brand">
+      <div class="brand-icon">🩺</div>
+      <div><div class="brand-name">Plantão Seguro</div><div class="brand-sub">Rastreador de Progresso — 30 Dias</div></div>
+    </div>
+    <div class="pct-big"><div class="pct-num" id="pct-num">0%</div><div class="pct-label">completo</div></div>
+  </div>
+  <div class="bar-wrap"><div class="bar-fill" id="bar-geral" style="width:0%"></div></div>
+  <div class="stats-row">
+    <div class="stat"><span id="stat-dias">0</span>/30 dias concluídos</div>
+    <div class="stat"><span id="stat-ok">0</span>/<span id="stat-tot">0</span> atividades</div>
+  </div>
+  <div class="weeks-grid" id="weeks-grid"></div>
+</div></div>
+
+<div id="main"><div class="inner">
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#6366f1"></div>📖 Estudo</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>🔄 Revisão</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>✅ Questões</div>
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-f="todos">Todos os dias</button>
+    <button class="filter-btn" data-f="pendentes">Pendentes</button>
+    <button class="filter-btn" data-f="progresso">Em progresso</button>
+    <button class="filter-btn" data-f="concluidos">Concluídos</button>
+  </div>
+  <div id="lista"></div>
+  <div class="footer">🎯 Marque 📖 Estudo → 🔄 Revisão → ✅ Questões em cada subtópico.<br>Progresso salvo automaticamente no seu navegador.</div>
+</div></div>
+
+<script>
+var SEMANAS=[{num:1,label:"Semana 1",sub:"Emergências Críticas",cor:"#ef4444"},{num:2,label:"Semana 2",sub:"Clínica + Farmacologia",cor:"#f97316"},{num:3,label:"Semana 3",sub:"Metabólico + Infecto",cor:"#eab308"},{num:4,label:"Semana 4",sub:"Plantão Real",cor:"#3b82f6"}];
+var FASES=[{id:"e",label:"Estudo",icon:"📖",cor:"#6366f1"},{id:"r",label:"Revisão",icon:"🔄",cor:"#f97316"},{id:"q",label:"Questões",icon:"✅",cor:"#22c55e"}];
+var DIAS=[
+{day:1,sem:1,tema:"Dor Torácica I — SCA",sub:["IAM com Supra (IAMCSST): porta-balão <90min / porta-agulha <30min","IAM sem Supra (IAMSSST): estratificação TIMI/GRACE","Angina Instável: dor em repouso / >20min / não melhora com nitrato","Angina Estável vs Instável: como diferenciar na prática","Anticoagulação SCA: AAS + Clopidogrel/Ticagrelor + Enoxaparina + doses"]},
+{day:2,sem:1,tema:"Dor Torácica II — Causas Fatais Não Coronarianas",sub:["Dissecção de Aorta: dor súbita + dorso + PA diferente 2 braços + TC urgente","TEP: Wells score + D-dímero + Angio-TC + anticoagulação","Pneumotórax Hipertensivo: diagnóstico clínico + punção 2°EIC imediata","Tamponamento Cardíaco: tríade de Beck + pericardiocentese","Pericardite Aguda: supra côncavo + PR baixo + AINE + colchicina","Dor Torácica Não Cardiogênica: esôfago / musculoesquelético / ansiedade"]},
+{day:3,sem:1,tema:"Dispneia Aguda I — EAP / Asma / DPOC",sub:["EAP Cardiogênico: VNI-CPAP + furosemida EV + nitrato","Asma Aguda Grave: salbutamol contínuo 20/20min + MgSO4 2g EV","DPOC Exacerbado: VNI-BiPAP + corticoide + ATB se escarro purulento","VNI: CPAP vs BiPAP — indicações específicas de cada um","O2 no DPOC: alvo SpO2 88–92% (hiperóxia piora hipercapnia)"]},
+{day:4,sem:1,tema:"Dispneia Aguda II — TEP / Pneumonia / IOT / SRI",sub:["TEP com dispneia: apresentação atípica + Wells + tratamento","Pneumonia Grave: CURB-65 + critérios de UTI + ATB precoce","Indicações de IOT: rebaixamento / falha VNI / apneia / PCR iminente","SRI — Sequência Rápida de Intubação: ketamina + succinilcolina + doses","PaCO2 subindo em asmático = IOT iminente — nunca atrasar"]},
+{day:5,sem:1,tema:"Sepse e Choque Séptico",sub:["Critérios de Sepse: infecção + disfunção orgânica (SOFA ≥2)","qSOFA: FR≥22 / Glasgow alterado / PA sistólica ≤100","Choque Séptico: vasopressor + lactato >2 mmol/L","Bundle Hora 1: lactato + hemoculturas + ATB + 30ml/kg + vasopressor","ATB Empírico por Foco: pulmonar / urinário / abdominal / sem foco","Noradrenalina: dose + diluição + alvo PAM ≥65 + lactato seriado"]},
+{day:6,sem:1,tema:"Choque — Tipos e Vasopressores",sub:["Choque Distributivo/Séptico: pele quente + febre → noradrenalina","Choque Cardiogênico: pele fria + jugular alta → dobutamina ± noradrenalina","Choque Hipovolêmico/Hemorrágico: cristaloide + transfusão (Hb <7)","Choque Obstrutivo: pneumotórax / tamponamento / TEP maciço","Vasopressores: noradrenalina vs dobutamina vs vasopressina — quando cada um","Metas de Ressuscitação: PAM / diurese / lactato / nível de consciência"]},
+{day:7,sem:1,tema:"PCR / ACLS",sub:["Ritmos Chocáveis: FV e TV sem pulso — desfibrilação 200J imediata","Ritmos Não Chocáveis: AESP e Assistolia — RCP + adrenalina","RCP de Qualidade: 5–6cm / 100–120/min / retorno completo / <10s pausa","Adrenalina 1mg EV a cada 3–5min (todos os ritmos)","Amiodarona 300mg EV após 3° choque refratário","5H 5T: identificar e tratar causas reversíveis sempre","Pós-ROSC: temperatura 32–36°C / PA / O2 94–98% / glicemia / ECG"]},
+{day:8,sem:1,tema:"AVC — Isquêmico e Hemorrágico",sub:["FAST / Cincinnati: reconhecimento rápido + anotar hora exata","TC sem Contraste Urgente: isquêmico ou hemorrágico — muda tudo","Janela Trombólise: <4,5h — alteplase 0,9mg/kg (10% bolus + 90% 60min)","PA no AVC Isquêmico: NÃO tratar se <220/120 (exceto pré-trombólise <185/110)","Contraindicações da Trombólise: hemorragia / AVC-TCE <3m / PA refratária","AVC Hemorrágico: PA sistólica <140 + neurocirurgia urgente","Trombectomia Mecânica: janela até 24h — acionar neurorradiologia urgente"]},
+{day:9,sem:1,tema:"REVISÃO — Semana 1",sub:["Fluxogramas: dor torácica I e II (sem olhar)","Fluxogramas: dispneia I e II (sem olhar)","Fluxogramas: sepse, choque, PCR, AVC (sem olhar)","Red flags de todos os 8 temas anteriores","15 medicações essenciais com doses — de cor","REVISÃO SEMANA 1 — resolver casos clínicos"]},
+{day:10,sem:2,tema:"HAS e Crise Hipertensiva",sub:["Urgência vs Emergência: lesão de órgão-alvo define emergência","Lesões de Órgão-Alvo: encefalopatia / AVC / IAM / EAP / eclâmpsia / dissecção","Nitroprussiato EV: emergência hipertensiva — dose + monitorização","Hidralazina EV: gestante / eclâmpsia — dose + titulação","Captopril SL: urgência hipertensiva — dose + quando usar","Anti-hipertensivos Orais: losartana / enalapril / anlodipino / HCTZ — doses"]},
+{day:11,sem:2,tema:"ICC Descompensada",sub:["Perfis Hemodinâmicos: quente/frio × seco/congesto — como identificar","BNP / NT-proBNP: diagnóstico + prognóstico + interpretação","Furosemida EV: dose inicial + resposta esperada + resistência ao diurético","VNI no EAP: CPAP 5–10 cmH2O — indicação + benefício comprovado","Nitrato EV + Dobutamina: quando e como usar em cada perfil","Critérios de Internação vs Alta — EVEREST / AHA"]},
+{day:12,sem:2,tema:"Fibrilação Atrial",sub:["FA Instável: cardioversão elétrica 200J sincronizado — imediata","FA Estável: controle de FC primeiro — diltiazem / metoprolol / digoxina","CHADSVASC: calcular + anticoagulação quando e com o quê","Anticoagulação: heparina / rivaroxabana / dabigatrana / warfarina — doses","FA com WPW: NUNCA betabloqueador ou digital — morte por FV","Controle de Ritmo vs Frequência: quando preferir cada estratégia"]},
+{day:13,sem:2,tema:"Pneumonia",sub:["CAP vs Hospitalar vs Associada a VM: diferenças práticas","CURB-65: calcular + decisão de internação vs ambulatorial","Critérios de UTI: hipoxemia grave / choque / necessidade de VM","ATB CAP: ceftriaxona 2g EV + azitromicina 500mg EV — doses","Pneumonia Atípica: Legionella / Mycoplasma — cobertura + doses","Duração do Tratamento + Critérios de Alta"]},
+{day:14,sem:2,tema:"Diabetes — CAD e EHH",sub:["CAD: glicemia >250 + cetonemia + acidose metabólica pH<7,3","EHH: glicemia >600 + osmolaridade >320 + sem cetose significativa","Protocolo Insulina Regular EV: 0,1 UI/kg/h — como titular","Reposição de K+: OBRIGATÓRIO antes de insulina se K<3,5","Volume: SF 0,9% 1L/h na 1ª hora — reavaliar a cada hora","Monitorização: glicemia horária / eletrólitos 2/2h / gasometria","Transição para SC: quando pH>7,3 + gap aniônico normal + alimentando"]},
+{day:15,sem:2,tema:"REVISÃO — Semana 2",sub:["Fluxogramas: HAS / ICC / FA / Pneumonia / DM","Farmacologia da semana: doses de cor","REVISÃO SEMANA 2 — resolver casos clínicos"]},
+{day:16,sem:3,tema:"Hipoglicemia e Hiperglicemia Aguda",sub:["Hipoglicemia Grave: <54mg/dL ou sintomático — tratar imediato","Glicose 50%: 40–60ml EV (20–30g) — com acesso venoso","Glucagon 1mg IM/SC: sem acesso venoso + dose pediátrica","EHH: volume agressivo + insulina após K+ corrigido","Hiperglicemia de Estresse: meta 140–180mg/dL na internação"]},
+{day:17,sem:3,tema:"Distúrbios Eletrolíticos",sub:["Hiponatremia: correção máx 10mEq/24h — risco mielinólise pontina","Hipercalemia: ECG obrigatório + gluconato de Ca + insulina+glicose","ECG na Hipercalemia: onda T apiculada → alargamento QRS → sine wave","Hipocalemia: oral se >3,0 / EV se <3,0 ou sintomático — doses","Hipomagnesemia: MgSO4 2g EV — hipocalemia refratária = checar Mg"]},
+{day:18,sem:3,tema:"Insuficiência Renal Aguda",sub:["Pré-Renal: ureia/creatinina >20 / FeNa <1% / responde a volume","Renal (NTA): FeNa >2% / cilindros granulosos / não responde a volume","Pós-Renal: USG urgente / sondagem vesical / obstrução","Critérios KDIGO: creatinina + débito urinário","Indicações de Diálise: AEIOU (Acidose/Eletrólitos/Intox/Overload/Uremia)","Medicamentos Nefrotóxicos: AINE / aminoglicosídeo / contraste — suspender"]},
+{day:19,sem:3,tema:"ITU — Baixa e Alta",sub:["Cistite: disúria + polaciúria sem febre — tratamento ambulatorial","Pielonefrite: febre + calafrio + dor lombar — EV se grave/sepse","Sepse Urinária: pielonefrite + disfunção orgânica — protocolo sepse completo","ATB: nitrofurantoína / cefalexina / ceftriaxona EV — doses e duração","ITU na Gestante: sempre tratar / nitrofurantoína evitar no 3° trimestre"]},
+{day:20,sem:3,tema:"Antibióticos na Prática Clínica",sub:["Cobertura Gram+: oxacilina / vancomicina (MRSA) / cefalosporinas","Cobertura Gram-: ceftriaxona / cefepime / pip-tazo / meropenem","Cobertura Anaeróbios: metronidazol / pip-tazo / meropenem","Cobertura Atípicos: azitromicina / doxiciclina / levofloxacino","Escalonamento e Desescalonamento: como e quando decidir","Ajuste Renal: aminoglicosídeos / vancomicina / pip-tazo — como calcular"]},
+{day:21,sem:3,tema:"Anemias",sub:["Microcítica (VCM<80): ferropriva — sulfato ferroso 300mg 3x/dia VO","Macrocítica (VCM>100): B12/folato — reposição IM ou oral","Normocítica: doença crônica / hemolítica / perda aguda","Reticulócitos: alto = hemólise ou sangramento / baixo = produção reduzida","Indicações de Transfusão: Hb<7 / <8 em cardiopatas / sintomático"]},
+{day:22,sem:3,tema:"REVISÃO — Semana 3",sub:["Correções eletrolíticas: hiponatremia / hipercalemia — de cor","IRA: diagnóstico diferencial + indicações de diálise","ATB: cobertura por patógeno de cor","REVISÃO SEMANA 3 — resolver casos clínicos"]},
+{day:23,sem:4,tema:"Dor Abdominal / Abdome Agudo",sub:["Apendicite: dor FID / Blumberg / Psoas / Rovsing / USG / cirurgia","Colecistite Aguda: Murphy / dor HCD / USG / critérios cirúrgicos","Pancreatite Aguda: lipase >3x / Ranson / TC se falha clínica 72h","Perfuração de Víscera: pneumoperitônio / defesa generalizada / cirurgia urgente","Isquemia Mesentérica: dor desproporcional ao exame / idoso + FA","Red Flags Cirúrgicos: defesa + rigidez + sepse + instabilidade = cirurgia"]},
+{day:24,sem:4,tema:"Agitação Psicomotora e Delirium",sub:["Causa Orgânica Primeiro: hipoglicemia / hipóxia / delirium / intoxicação","Delirium: confusão flutuante / distúrbio de atenção — sempre causa orgânica","Contenção: verbal → física → química (nesta ordem obrigatória)","Haloperidol 5mg IM: 1ª escolha para agitação orgânica","Midazolam 5mg IM: agitação grave / risco imediato de dano","NUNCA sedar sem excluir hipoglicemia e hipóxia — pode matar"]},
+{day:25,sem:4,tema:"Convulsão e Status Epilepticus",sub:["Status Epilepticus: crise >5min OU 2 crises sem recuperação entre elas","Glicemia Capilar: IMEDIATO — hipoglicemia mimetiza/causa convulsão","1ª Linha: diazepam 10mg EV lento OU midazolam 10mg IM","2ª Linha: fenitoína 20mg/kg EV (50mg/min máx / ECG monitorado)","3ª Linha: fenobarbital 20mg/kg EV / propofol / midazolam contínuo","Causas Reversíveis: hipoglicemia / hiponatremia / hipóxia / abstinência"]},
+{day:26,sem:4,tema:"Anafilaxia",sub:["Diagnóstico: 2 de 3 sistemas (cutâneo/resp/cardio) + exposição a alérgeno","Adrenalina 0,3mg IM coxa lateral: IMEDIATO — nunca atrasar","Posição: supina + pernas elevadas (choque) / sentado (broncoespasmo)","Sequência: O2 alto fluxo + 2 acessos + volume EV 500ml rápido","Anti-histamínico + Corticoide: 2ª linha — não substituem adrenalina","Reação Bifásica: observar 4–6h — ocorre em até 20% dos casos"]},
+{day:27,sem:4,tema:"Trauma — ABCDE",sub:["A: Via Aérea + Colar Cervical — IOT se GCS ≤8","B: Respiração + Ventilação — simetria + pneumotórax + hemotórax","C: Circulação + Hemostasia — 2 acessos calibrosos + compressão direta","D: Déficit Neurológico — GCS + pupilas + déficit focal + glicemia","E: Exposição + Temperatura — despir completamente / hipotermia mata","TCE Grave (GCS≤8): TC urgente + neurocirurgia + cabeceira 30°"]},
+{day:28,sem:4,tema:"Pediatria e GO Básico",sub:["Febre <3 meses: internação OBRIGATÓRIA — sepse workup completo","Febre sem Foco 3–36m: estratificar / hemograma / PCR","Desidratação Pediátrica: 20ml/kg SF rápido se grave","Crise Convulsiva Febril: diazepam retal 0,5mg/kg","Pré-Eclâmpsia: PA≥140/90 + proteinúria após 20ª semana","MgSO4: 4–6g EV ataque (20min) → 1–2g/h manutenção","Hidralazina 5–10mg EV: crise hipertensiva na gestante"]},
+{day:29,sem:4,tema:"REVISÃO — Semana 4",sub:["Fluxogramas: abdome / agitação / convulsão / anafilaxia / trauma / GO","Farmacologia da semana: doses de cor","REVISÃO SEMANA 4 — resolver casos clínicos"]},
+{day:30,sem:4,tema:"REVISÃO GERAL FINAL ✓",sub:["Todos os fluxogramas — de cor, sem olhar o material","Todas as red flags — de todos os temas","20 medicações essenciais — doses de cor","REVISÃO GERAL FINAL — casos clínicos","✓ PRONTO PARA O PLANTÃO"]}
+];
+
+var KEY="plantao30d_v1";
+var dados={};
+var exp={};
+var filtro="todos";
+
+function load(){try{var v=localStorage.getItem(KEY);if(v)dados=JSON.parse(v);}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(dados));}catch(e){}}
+function dk(day,si,fid){return day+"-"+si+"-"+fid;}
+function feito(day){
+  var d=DIAS.find(function(x){return x.day===day;});
+  if(!d)return 0;
+  return d.sub.reduce(function(a,_,si){return a+FASES.filter(function(f){return dados[dk(day,si,f.id)];}).length;},0);
+}
+function pct(day){var t=DIAS.find(function(x){return x.day===day;});if(!t)return 0;var tot=t.sub.length*3;return tot?Math.round(feito(day)/tot*100):0;}
+function cor(p){if(p===100)return"#22c55e";if(p>=60)return"#f97316";if(p>0)return"#6366f1";return"#1e2535";}
+
+function hero(){
+  var ta=DIAS.reduce(function(a,d){return a+d.sub.length*3;},0);
+  var ok=DIAS.reduce(function(a,d){return a+feito(d.day);},0);
+  var p=Math.round(ok/ta*100);
+  var dc=DIAS.filter(function(d){return pct(d.day)===100;}).length;
+  document.getElementById("pct-num").textContent=p+"%";
+  document.getElementById("bar-geral").style.width=p+"%";
+  document.getElementById("stat-dias").textContent=dc;
+  document.getElementById("stat-ok").textContent=ok;
+  document.getElementById("stat-tot").textContent=ta;
+  var wg=document.getElementById("weeks-grid");
+  wg.innerHTML="";
+  SEMANAS.forEach(function(s){
+    var ds=DIAS.filter(function(d){return d.sem===s.num;});
+    var o=ds.reduce(function(a,d){return a+feito(d.day);},0);
+    var t=ds.reduce(function(a,d){return a+d.sub.length*3;},0);
+    var pp=Math.round(o/t*100);
+    var cc=ds.filter(function(d){return pct(d.day)===100;}).length;
+    var el=document.createElement("div");
+    el.className="week-card";
+    el.style.border="1px solid "+s.cor+"25";
+    el.innerHTML='<div class="week-label" style="color:'+s.cor+'">'+s.label+" — "+s.sub+'</div><div class="week-bar"><div class="week-fill" style="width:'+pp+'%;background:'+s.cor+'"></div></div><div class="week-stats">'+pp+"% · "+cc+"/"+ds.length+" dias</div>";
+    wg.appendChild(el);
+  });
+}
+
+function lista(){
+  var el=document.getElementById("lista");
+  el.innerHTML="";
+  SEMANAS.forEach(function(s){
+    var ds=DIAS.filter(function(d){
+      if(d.sem!==s.num)return false;
+      var p=pct(d.day);
+      if(filtro==="pendentes")return p<100;
+      if(filtro==="progresso")return p>0&&p<100;
+      if(filtro==="concluidos")return p===100;
+      return true;
+    });
+    if(!ds.length)return;
+    var ti=document.createElement("div");
+    ti.className="sem-title";ti.style.color=s.cor;
+    ti.textContent=s.label+" — "+s.sub;
+    el.appendChild(ti);
+    ds.forEach(function(d){el.appendChild(card(d));});
+  });
+}
+
+function card(d){
+  var p=pct(d.day);var done=p===100;var open=!!exp[d.day];var c=cor(p);
+  var el=document.createElement("div");
+  el.className="day-card"+(done?" done":"");
+  var hd=document.createElement("div");hd.className="day-head";
+  hd.innerHTML='<div class="day-num'+(done?" done":"")+'">'+d.day+'</div><div class="day-info"><div class="day-tema'+(done?" done":"")+'">'+d.tema+'</div><div class="day-bar-row"><div class="day-bar-track"><div class="day-bar-fill" style="width:'+p+'%;background:'+c+'"></div></div><span class="day-pct" style="color:'+c+'">'+p+'%</span></div></div><span class="chevron">'+(open?"▲":"▼")+'</span>';
+  hd.addEventListener("click",function(){exp[d.day]=!exp[d.day];lista();});
+  el.appendChild(hd);
+  if(open){
+    var sa=document.createElement("div");sa.className="sub-area";
+    d.sub.forEach(function(sub,si){
+      var cnt=FASES.filter(function(f){return dados[dk(d.day,si,f.id)];}).length;
+      var sd=cnt===3;
+      var it=document.createElement("div");it.className="sub-item";
+      var tx=document.createElement("div");tx.className="sub-text"+(sd?" done":"");tx.textContent=(si+1)+". "+sub;
+      it.appendChild(tx);
+      var fr=document.createElement("div");fr.className="fase-row";
+      FASES.forEach(function(f){
+        var ok=!!dados[dk(d.day,si,f.id)];
+        var bt=document.createElement("button");bt.className="fase-btn";
+        bt.style.border="1px solid "+(ok?f.cor:"#1e293b");
+        bt.style.color=ok?f.cor:"#334155";
+        bt.style.background=ok?f.cor+"20":"transparent";
+        bt.textContent=f.icon+(ok?" ✓ ":" ")+f.label;
+        bt.addEventListener("click",function(e){
+          e.stopPropagation();
+          dados[dk(d.day,si,f.id)]=!dados[dk(d.day,si,f.id)];
+          save();hero();lista();
+        });
+        fr.appendChild(bt);
+      });
+      it.appendChild(fr);sa.appendChild(it);
+    });
+    el.appendChild(sa);
+  }
+  return el;
+}
+
+document.getElementById("filters").addEventListener("click",function(e){
+  var b=e.target.closest(".filter-btn");if(!b)return;
+  filtro=b.dataset.f;
+  document.querySelectorAll(".filter-btn").forEach(function(x){x.classList.remove("active");});
+  b.classList.add("active");lista();
+});
+
+load();hero();lista();
+</script>
+</body>
+</html>
